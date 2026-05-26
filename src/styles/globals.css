@@ -1,0 +1,637 @@
+/* ============================================================
+   SafetyZ° v3.1 — Editorial Dark Magazine
+   Fraunces (serif variable) + DM Sans (display sans) + JetBrains Mono
+   Grain overlay, vignette, asymmetric composition, magnetic hovers
+   ============================================================ */
+
+:root {
+  /* === Surfaces — deeper, more atmospheric === */
+  --bg:        #06070C;
+  --bg-soft:   #0A0C14;
+  --bg-elev:   #10131F;
+  --bg-elev-2: #1A1F30;
+  --bg-ink:    #02030A;        /* deepest — for vignette ends */
+
+  /* === Borders / hairlines === */
+  --hairline:        rgba(255, 255, 255, 0.06);
+  --hairline-strong: rgba(148, 163, 184, 0.18);
+  --hairline-glow:   rgba(80, 165, 255, 0.22);
+
+  /* === Text === */
+  --text:        #F2F1EC;       /* warm off-white, less "Apple" */
+  --text-soft:   #D4D2C9;
+  --text-muted:  #8B8A82;
+  --text-faint:  #5E5D58;
+
+  /* === Accent — electric blue, but warmer === */
+  --accent:        #4DA3FF;
+  --accent-deep:   #1B6FE0;
+  --accent-glow:   rgba(77, 163, 255, 0.40);
+  --accent-soft:   #80BAFF;
+  --accent-warm:   #FF7847;     /* secondary accent — orange burst for highlights */
+
+  /* === Type === */
+  --font-display:  'Fraunces', Georgia, serif;
+  --font-sans:     'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:     'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif:    'Fraunces', 'Instrument Serif', Georgia, serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, monospace;
+
+  /* === Layout === */
+  --container:   1280px;
+  --rail-w:      90px;
+  --nav-h:       66px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html { scroll-behavior: smooth; }
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ============================================================
+   Grain overlay — atmosphere & texture (defesa contra "AI slop")
+   SVG fractal noise, fixed across viewport, very subtle
+============================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.65 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
+/* Vignette — sutil, força foco no centro */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at top, transparent 40%, rgba(6, 7, 12, 0.40) 100%),
+    radial-gradient(ellipse at bottom, transparent 40%, rgba(6, 7, 12, 0.50) 100%);
+}
+
+::selection {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+
+::-webkit-scrollbar       { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.10); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Tipografia — editorial magazine:
+   Fraunces para massive serif moments (display-mega)
+   DM Sans para tudo que é sans
+   Mix de ambos no hero pra layered typographic energy
+============================================================ */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* HERO MEGA: Fraunces black, wonky — singelo mas presente */
+.display-mega {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 7.5vw, 108px);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  font-variation-settings: "opsz" 96, "SOFT" 50, "WONK" 1;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Hero alternate — DM Sans display */
+.display-mega-sans {
+  font-family: var(--font-sans);
+  font-size: clamp(44px, 7.5vw, 108px);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Section h2 — proporcional */
+.display-1 {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5.5vw, 76px);
+  line-height: 1.00;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  font-variation-settings: "opsz" 72, "SOFT" 30, "WONK" 1;
+  color: var(--text);
+  margin: 0;
+}
+
+.display-2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.8vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.020em;
+  font-weight: 700;
+  font-variation-settings: "opsz" 60, "SOFT" 50;
+  color: var(--text);
+  margin: 0;
+}
+
+.display-3 {
+  font-family: var(--font-sans);
+  font-size: clamp(22px, 2.5vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.020em;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Editorial italic — Fraunces ital — wonky energy */
+.italic-tag {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: "opsz" 24, "SOFT" 100, "WONK" 1;
+  color: var(--text);
+}
+
+.italic-display {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-variation-settings: "opsz" 96, "SOFT" 100, "WONK" 1;
+}
+
+/* Section markers — mono, monolithic */
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.10em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Section marker rotacionado 90° — true editorial */
+.section-num-vertical {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.lead {
+  font-family: var(--font-body);
+  font-size: clamp(17px, 1.4vw, 21px);
+  line-height: 1.50;
+  color: var(--text-soft);
+  font-weight: 400;
+  max-width: 640px;
+}
+
+.caption {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* ============================================================
+   Container + grid editorial
+============================================================ */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 22px;
+  position: relative;
+}
+@media (min-width: 768px) {
+  .container { padding: 0 40px; }
+}
+@media (min-width: 1280px) {
+  .container { padding: 0 56px; }
+}
+
+.section {
+  position: relative;
+  padding: clamp(88px, 11vw, 160px) 0;
+}
+
+.section-tight {
+  padding: clamp(56px, 6vw, 88px) 0;
+}
+
+/* Editorial 2-col: rail (caption) + main */
+.editorial-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 1024px) {
+  .editorial-grid {
+    grid-template-columns: var(--rail-w) 1fr;
+    gap: 36px;
+  }
+}
+
+/* ============================================================
+   Sphere — Atmospheric blue glossy
+============================================================ */
+.sphere {
+  position: relative;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 70% 70%, #02030A 30%, #0A1326 80%),
+    #02030A;
+  box-shadow:
+    inset 18% 18% 60px -10px rgba(77, 163, 255, 0.85),
+    inset 30% 30% 80px -20px rgba(128, 186, 255, 0.40),
+    inset -25% -25% 80px -10px rgba(0, 0, 0, 0.95),
+    0 0 140px 30px rgba(77, 163, 255, 0.18),
+    0 30px 90px rgba(0, 0, 0, 0.70);
+  overflow: hidden;
+}
+.sphere::before {
+  content: '';
+  position: absolute;
+  top: 14%;
+  left: 18%;
+  width: 30%;
+  height: 22%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(200, 230, 255, 0.55), transparent 70%);
+  filter: blur(8px);
+  pointer-events: none;
+}
+.sphere::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 22% 22%, rgba(255, 255, 255, 0.22) 0%, transparent 15%);
+  pointer-events: none;
+}
+
+/* Asterisk — slow rotation forever (editorial signature) */
+.asterisk-rotate {
+  animation: rotate-slow 18s linear infinite;
+}
+@keyframes rotate-slow {
+  to { transform: rotate(360deg); }
+}
+
+.asterisk {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+.asterisk-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============================================================
+   Diagonal divider — section break with character
+============================================================ */
+.diagonal-divider {
+  position: relative;
+  height: 64px;
+  overflow: hidden;
+}
+.diagonal-divider::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(105deg,
+      transparent 0%,
+      transparent calc(50% - 0.5px),
+      var(--hairline-strong) calc(50% - 0.5px),
+      var(--hairline-strong) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px),
+      transparent 100%
+    );
+}
+.diagonal-divider::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+
+/* ============================================================
+   Inputs underline (CTA "Get in Touch")
+============================================================ */
+.input-line {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--hairline-strong);
+  padding: 18px 0;
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s ease, padding 0.2s ease;
+}
+.input-line::placeholder { color: var(--text-muted); }
+.input-line:focus {
+  border-color: var(--accent);
+  padding-left: 8px;
+}
+
+/* ============================================================
+   Buttons
+============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 8px 32px -8px rgba(77, 163, 255, 0.50);
+}
+.btn-primary:hover {
+  background: var(--accent-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -8px rgba(77, 163, 255, 0.60);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--hairline-strong);
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-muted);
+  transform: translateY(-2px);
+}
+
+.btn-warm {
+  background: var(--accent-warm);
+  color: #fff;
+  box-shadow: 0 8px 32px -8px rgba(255, 120, 71, 0.50);
+}
+.btn-warm:hover {
+  background: #E5552C;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -8px rgba(255, 120, 71, 0.60);
+}
+
+.btn-lg { padding: 17px 28px; font-size: 15px; }
+.btn-icon-only {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  padding: 0;
+  justify-content: center;
+}
+
+/* Arrow link — agency editorial */
+.link-underline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text);
+  padding-bottom: 4px;
+  border-bottom: 1px solid currentColor;
+  transition: color 0.18s ease, border-color 0.18s ease, gap 0.18s ease;
+}
+.link-underline:hover {
+  color: var(--accent);
+  gap: 12px;
+}
+
+/* ============================================================
+   Reveal-on-scroll — refined choreography
+============================================================ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.15s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-reveal-delay="1"].is-visible { transition-delay: 0.10s; }
+[data-reveal-delay="2"].is-visible { transition-delay: 0.20s; }
+[data-reveal-delay="3"].is-visible { transition-delay: 0.32s; }
+[data-reveal-delay="4"].is-visible { transition-delay: 0.45s; }
+[data-reveal-delay="5"].is-visible { transition-delay: 0.58s; }
+
+/* Word-by-word stagger — hero headline reveal with slight rotation */
+[data-word] {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.6em) rotateX(35deg);
+  transform-origin: bottom center;
+  transition:
+    opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.05s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-word].is-visible {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-word] { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+  .sphere-float,
+  .asterisk-rotate { animation: none !important; }
+}
+
+/* Sphere float animation */
+@keyframes sphere-float {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(-10px, -16px); }
+  66%      { transform: translate(8px, -8px); }
+}
+.sphere-float { animation: sphere-float 11s ease-in-out infinite; }
+
+/* Pulse */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.15); }
+}
+
+/* Marquee — adjustable, pause on hover */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Gentle parallax float for orbit elements */
+@keyframes orbit-bob {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-14px); }
+}
+.orbit-bob { animation: orbit-bob 7s ease-in-out infinite; }
+
+/* Glitch reveal — for accent moments */
+@keyframes glitch-in {
+  0%   { clip-path: inset(40% 0 60% 0); transform: translateX(-2px); }
+  40%  { clip-path: inset(60% 0 30% 0); transform: translateX(2px); }
+  100% { clip-path: inset(0); transform: translateX(0); }
+}
+
+/* ============================================================
+   Decorative dots — atmospheric stars/sparks
+============================================================ */
+.spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px var(--accent-glow), 0 0 32px var(--accent-glow);
+  opacity: 0;
+  animation: spark-twinkle 4s ease-in-out infinite;
+}
+@keyframes spark-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.6); }
+  50%      { opacity: 0.8; transform: scale(1); }
+}
+
+/* ============================================================
+   Utilities
+============================================================ */
+.flex { display: flex; }
+.col  { display: flex; flex-direction: column; }
+.center { text-align: center; }
+.muted  { color: var(--text-muted); }
+.mono   { font-family: var(--font-mono); }
+.serif  { font-family: var(--font-serif); }
+.italic { font-style: italic; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+
+.hide-md { display: initial; }
+@media (min-width: 768px)  { .hide-md { display: none !important; } }
+.show-md { display: none; }
+@media (min-width: 768px)  { .show-md { display: initial; } }
+.show-lg { display: none; }
+@media (min-width: 1024px) { .show-lg { display: initial; } }
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: var(--hairline);
+  margin: 0;
+}
+
+/* Hairline glowing line — for emphasis under sections */
+.hairline-glow {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+  margin: 0;
+}
+
+/* Crosshatched accent — decorative grid pattern for backgrounds */
+.crosshatch {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
